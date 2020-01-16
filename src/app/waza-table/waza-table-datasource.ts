@@ -1,37 +1,19 @@
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { DataSource } from "@angular/cdk/collections";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { map } from "rxjs/operators";
+import { Observable, of as observableOf, merge } from "rxjs";
 
 // TODO: Replace this with your own data model type
 export interface WazaTableItem {
-  name: string;
+  attack: string;
   id: number;
+  response: string;
 }
 
 // TODO: replace this with real data from your application
 const EXAMPLE_DATA: WazaTableItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
+  { id: 0, attack: "Shomenuchi", response: "Ikkyo" }
 ];
 
 /**
@@ -62,9 +44,11 @@ export class WazaTableDataSource extends DataSource<WazaTableItem> {
       this.sort.sortChange
     ];
 
-    return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
-    }));
+    return merge(...dataMutations).pipe(
+      map(() => {
+        return this.getPagedData(this.getSortedData([...this.data]));
+      })
+    );
   }
 
   /**
@@ -87,16 +71,21 @@ export class WazaTableDataSource extends DataSource<WazaTableItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   private getSortedData(data: WazaTableItem[]) {
-    if (!this.sort.active || this.sort.direction === '') {
+    if (!this.sort.active || this.sort.direction === "") {
       return data;
     }
 
     return data.sort((a, b) => {
-      const isAsc = this.sort.direction === 'asc';
+      const isAsc = this.sort.direction === "asc";
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
-        default: return 0;
+        case "id":
+          return compare(+a.id, +b.id, isAsc);
+        case "attack":
+          return compare(a.attack, b.attack, isAsc);
+        case "response":
+          return compare(a.response, b.response, isAsc);
+        default:
+          return 0;
       }
     });
   }

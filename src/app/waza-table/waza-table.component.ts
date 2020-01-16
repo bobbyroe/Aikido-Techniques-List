@@ -17,14 +17,14 @@ export class WazaTableComponent implements AfterViewInit, OnInit {
   dataSource: WazaTableDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["id", "name"];
+  displayedColumns = ["id", "attack", "response"];
 
   constructor(private wazaService: AikidoService) {}
 
   ngOnInit() {
     this.dataSource = new WazaTableDataSource();
     this.wazaService.getData().subscribe(res => {
-      console.log(res);
+      console.log(res["data"].waza);
     });
   }
 
